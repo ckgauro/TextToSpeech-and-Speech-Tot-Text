@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'speechToText.dart';
+import 'TestSpeech.dart';
 
 void main() => runApp(MyApp());
 
@@ -167,6 +169,22 @@ class _MyHomeState extends State<MyHome> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Flutter TTS'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.access_alarms),
+              onPressed: () {
+                //Navigator.of(context).push(SpeechToText());
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => SpeechToText()),
+                // );
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestExample()),
+                );
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
