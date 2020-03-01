@@ -33,6 +33,8 @@ class _MyHomeState extends State<MyHome> {
   double pitch = 1.0;
   double rate = 0.5;
 
+  var _changeVoice = true;
+
   String _newVoiceText;
   String _newVoiceText2;
 
@@ -64,8 +66,7 @@ class _MyHomeState extends State<MyHome> {
       setState(() {
         print("Complete");
         ttsState = TtsState.stopped;
-        _speak2(_newVoiceText2);
-    
+        //  _speak2(_newVoiceText2);
       });
     });
 
@@ -94,22 +95,32 @@ class _MyHomeState extends State<MyHome> {
     //   }
     // }
     _speak2(_newVoiceText);
-    
-
   }
-Future _speak2(String text) async {
+
+  Future _speak2(String text) async {
+    print(await flutterTts.getLanguages);
+    print('--------');
+    print(await flutterTts.getVoices);
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
+    //await flutterTts.setVoice("en-gb-x-fis#male_2-local");
+    // await flutterTts.setVoice("en-gb-x-fis#male_2-local");
+    if (_changeVoice) {
+      await flutterTts.setVoice("es-us-x-sfb-local");
+    } else {
+      await flutterTts.setVoice("es-us-x-sfb#male_3-local");
+    }
+    _changeVoice = !_changeVoice;
     if (text != null) {
       if (_newVoiceText.isNotEmpty) {
         var result = await flutterTts.speak(text);
         if (result == 1) setState(() => ttsState = TtsState.playing);
       }
     }
-    
   }
+
   Future _stop() async {
     var result = await flutterTts.stop();
     print('Result $result');
@@ -142,6 +153,7 @@ Future _speak2(String text) async {
       _newVoiceText = text;
     });
   }
+
   void _onChange2(String text) {
     setState(() {
       _newVoiceText2 = text;
@@ -151,6 +163,7 @@ Future _speak2(String text) async {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text('Flutter TTS'),
@@ -178,7 +191,7 @@ Future _speak2(String text) async {
         },
       ));
 
-      Widget _inputSection2() => Container(
+  Widget _inputSection2() => Container(
       alignment: Alignment.topCenter,
       padding: EdgeInsets.only(top: 25.0, left: 25.0, right: 25.0),
       child: TextField(
