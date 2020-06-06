@@ -3,6 +3,9 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:async';
 import 'dart:io' show Platform;
+
+import 'package:text_to_speech/Data.dart';
+
 enum TtsState { playing, stopped, paused, continued }
 
 class TextToSpeechExample extends StatefulWidget {
@@ -17,6 +20,7 @@ class _TextToSpeechExampleState extends State<TextToSpeechExample> {
   double volume = 0.5;
   double pitch = 1.0;
   double rate = 0.5;
+  int i = 0;
 
   String _newVoiceText;
 
@@ -51,7 +55,25 @@ class _TextToSpeechExampleState extends State<TextToSpeechExample> {
     flutterTts.setCompletionHandler(() {
       setState(() {
         print("Complete");
-        ttsState = TtsState.stopped;
+        if (i < (lsdefinition.length - 1)) {
+          print(i);
+          setState(() {
+            i = i + 1;
+          });
+
+          print(i);
+          print('Calling-_speak-->');
+            Future.delayed(const Duration(milliseconds: 500), () {
+             _speak();
+          });
+         
+        } else {
+          setState(() {
+            i = 0;
+          });
+          ttsState = TtsState.stopped;
+        
+        }
       });
     });
 
@@ -92,13 +114,17 @@ class _TextToSpeechExampleState extends State<TextToSpeechExample> {
   }
 
   Future _speak() async {
+    print('Calling $i');
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
     await flutterTts.setPitch(pitch);
 
     if (_newVoiceText != null) {
       if (_newVoiceText.isNotEmpty) {
-        var result = await flutterTts.speak(_newVoiceText);
+        // var result = await flutterTts.speak(_newVoiceText);
+        print(i);
+        print(lsdefinition[i]);
+        var result = await flutterTts.speak(lsdefinition[i]);
         print(result);
         print(isPlaying);
         if (result == 1) setState(() => ttsState = TtsState.playing);
