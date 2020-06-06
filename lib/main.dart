@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:text_to_speech/TextToSpeech.dart';
 import 'speechToText.dart';
 import 'TestSpeech.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHome(),
+      home: TextToSpeechExample(),
     );
   }
 }
@@ -102,6 +103,7 @@ class _MyHomeState extends State<MyHome> {
   Future _speak2(String text) async {
     print(await flutterTts.getLanguages);
     print('--------');
+    //print(await flutterTts.getVoices)
     print(await flutterTts.getVoices);
     await flutterTts.setVolume(volume);
     await flutterTts.setSpeechRate(rate);
@@ -109,11 +111,11 @@ class _MyHomeState extends State<MyHome> {
 
     //await flutterTts.setVoice("en-gb-x-fis#male_2-local");
     // await flutterTts.setVoice("en-gb-x-fis#male_2-local");
-    if (_changeVoice) {
-      await flutterTts.setVoice("es-us-x-sfb-local");
-    } else {
-      await flutterTts.setVoice("es-us-x-sfb#male_3-local");
-    }
+    // if (_changeVoice) {
+    //   await flutterTts.setVoice("es-us-x-sfb-local");
+    // } else {
+    //   await flutterTts.setVoice("es-us-x-sfb#male_3-local");
+    // }
     _changeVoice = !_changeVoice;
     if (text != null) {
       if (_newVoiceText.isNotEmpty) {
@@ -169,28 +171,52 @@ class _MyHomeState extends State<MyHome> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Flutter TTS'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.access_alarms),
-              onPressed: () {
-                //Navigator.of(context).push(SpeechToText());
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => SpeechToText()),
-                // );
-                 Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TestExample()),
-                );
-              },
-            ),
-          ],
+          // actions: <Widget>[
+          //   IconButton(
+          //     icon: Icon(Icons.access_alarms),
+          //     onPressed: () {
+          //       //Navigator.of(context).push(SpeechToText());
+          //       // Navigator.push(
+          //       //   context,
+          //       //   MaterialPageRoute(builder: (context) => SpeechToText()),
+          //       // );
+          //        Navigator.push(
+          //         context,
+          //         MaterialPageRoute(builder: (context) => TestExample()),
+          //       );
+          //     },
+          //   ),
+          // ],
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(children: [
             _inputSection(),
             _inputSection2(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                    child: Text('Sound'),
+                    onPressed: () {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => TestExample()));
+                    }),
+                SizedBox(
+                  width: 10,
+                ),
+                RaisedButton(
+                    child: Text('Sound Next'),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SpeechToText()));
+                    }),
+              ],
+            ),
             _btnSection(),
             languages != null ? _languageDropDownSection() : Text(""),
             _buildSliders()
